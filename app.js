@@ -71,6 +71,7 @@ function handleSubmit(e) {
 
   if (!title) {
     alert('Введите задачу');
+    e.target.title.value = '';
     return;
   }
   addTask(title);
