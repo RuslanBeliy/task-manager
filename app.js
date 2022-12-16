@@ -54,7 +54,7 @@ const themes = {
 form.addEventListener('submit', handleSubmit);
 list.addEventListener('click', handleTaskBtns);
 selectTheme.addEventListener('change', (e) => handleSelectTheme(e.target.value));
-searchField.addEventListener('input', searchTask);
+searchField.addEventListener('input', renderActiveFilter);
 filterBtns.forEach((btn) =>
   btn.addEventListener('click', (e) => {
     handleFilter(e.target.name, btn);
@@ -83,7 +83,8 @@ function addTask(title) {
   const newTask = { id: Math.random(), title, completed: false };
   tasks.unshift(newTask);
   setDataLS();
-  filterBtns.forEach((btn) => btn.classList.contains('active') && handleFilter(btn.name, btn));
+  searchField.value = '';
+  renderActiveFilter();
 }
 
 function handleTaskBtns(e) {
@@ -99,27 +100,20 @@ function handleTaskBtns(e) {
 function removeTask(id) {
   tasks = tasks.filter((el) => el.id !== id);
   setDataLS();
-  filterBtns.forEach(
-    (btn) =>
-      btn.classList.contains('active') &&
-      handleFilter(btn.name, btn, searchField.value.toLowerCase())
-  );
+  renderActiveFilter();
 }
 
 function completedTask(id) {
   tasks = tasks.map((el) => (el.id === id ? { ...el, completed: !el.completed } : el));
   setDataLS();
+  renderActiveFilter();
+}
+
+function renderActiveFilter() {
   filterBtns.forEach(
     (btn) =>
       btn.classList.contains('active') &&
       handleFilter(btn.name, btn, searchField.value.toLowerCase())
-  );
-}
-
-function searchTask(e) {
-  const value = e.target.value.toLowerCase();
-  filterBtns.forEach(
-    (btn) => btn.classList.contains('active') && handleFilter(btn.name, btn, value)
   );
 }
 
