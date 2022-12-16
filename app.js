@@ -70,7 +70,7 @@ function handleSubmit(e) {
   const title = e.target.title.value.trim();
 
   if (!title) {
-    alert('Все поля должны быть заполнены');
+    alert('Введите задачу');
     return;
   }
   addTask(title);
