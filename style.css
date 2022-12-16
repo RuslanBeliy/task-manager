@@ -77,8 +77,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(-15deg);
-  font-size: 36px;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  font-size: 34px;
   font-weight: 700;
   color: rgb(205, 226, 13);
   text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;

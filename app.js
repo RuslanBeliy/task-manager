@@ -54,7 +54,7 @@ const themes = {
 form.addEventListener('submit', handleSubmit);
 list.addEventListener('click', handleTaskBtns);
 selectTheme.addEventListener('change', (e) => handleSelectTheme(e.target.value));
-searchField.addEventListener('input', seachTask);
+searchField.addEventListener('input', searchTask);
 filterBtns.forEach((btn) =>
   btn.addEventListener('click', (e) => {
     handleFilter(e.target.name, btn);
@@ -68,20 +68,19 @@ function handleSubmit(e) {
   e.preventDefault();
 
   const title = e.target.title.value.trim();
-  const body = e.target.body.value.trim();
 
-  if (!title || !body) {
+  if (!title) {
     alert('Все поля должны быть заполнены');
     return;
   }
-  addTask(title, body);
+  addTask(title);
 
   e.target.reset();
   e.target.title.focus();
 }
 
-function addTask(title, body) {
-  const newTask = { id: Math.random(), title, body, completed: false };
+function addTask(title) {
+  const newTask = { id: Math.random(), title, completed: false };
   tasks.unshift(newTask);
   setDataLS();
   filterBtns.forEach((btn) => btn.classList.contains('active') && handleFilter(btn.name, btn));
@@ -101,7 +100,9 @@ function removeTask(id) {
   tasks = tasks.filter((el) => el.id !== id);
   setDataLS();
   filterBtns.forEach(
-    (btn) => btn.classList.contains('active') && handleFilter(btn.name, btn, searchField.value)
+    (btn) =>
+      btn.classList.contains('active') &&
+      handleFilter(btn.name, btn, searchField.value.toLowerCase())
   );
 }
 
@@ -109,11 +110,13 @@ function completedTask(id) {
   tasks = tasks.map((el) => (el.id === id ? { ...el, completed: !el.completed } : el));
   setDataLS();
   filterBtns.forEach(
-    (btn) => btn.classList.contains('active') && handleFilter(btn.name, btn, searchField.value)
+    (btn) =>
+      btn.classList.contains('active') &&
+      handleFilter(btn.name, btn, searchField.value.toLowerCase())
   );
 }
 
-function seachTask(e) {
+function searchTask(e) {
   const value = e.target.value.toLowerCase();
   filterBtns.forEach(
     (btn) => btn.classList.contains('active') && handleFilter(btn.name, btn, value)
@@ -198,7 +201,6 @@ function htmlTaskTemplate(data = {}) {
       <span style="font-weight: 700;">${data.title}</span>
       <button class="btn btn-danger ml-auto delete-btn">Удалить</button>
       <button class="btn btn-success ml-2 completed-btn">Выполнено</button>
-      <p class="mt-2 w-100">${data.body}</p>
       <span class="completed ${data.completed && 'show'}">Выполнено</span>
     </li>
   `;
